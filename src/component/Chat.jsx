@@ -9,7 +9,7 @@ import { useChatContext } from "../Contexts/ChatContext"
 
 export function ChatMessage() {
 
-  const { activeChatId, profileToggle, setShowBtn } = useChatContext()
+  const { activeChatId, profileToggle, setShowBtn, setProfileBtn } = useChatContext()
   const chatListRef = useRef(null);
   const profileRef = useRef(null);
 
@@ -36,11 +36,10 @@ export function ChatMessage() {
     if (profileToggle) {
       profileRef.current?.classList.remove("showProfile");
       chatWindowRef.current?.classList.add("visible")
-      console.log(profileToggle)
-      console.log("hello")
+      setProfileBtn(true)
     } else {
       profileRef.current?.classList.add("showProfile");
-      console.log(profileToggle);
+      setProfileBtn(false);
     }
   }, [profileToggle]);
 

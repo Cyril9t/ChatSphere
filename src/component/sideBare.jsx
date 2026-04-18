@@ -21,7 +21,7 @@ export function Sidebar() {
                     <i className="fas fa-comment-alt"></i>
 
 
-                    <span> All chats</span> </button>
+                    <span>All chats</span> </button>
                 <button className="tab">
                     <i className="fas fa-comments"></i>
 
@@ -29,7 +29,7 @@ export function Sidebar() {
                 </button>
                 <button className="tab">
                     <i className="fas fa-archive"></i>
-                    <span>Archived</span></button>
+                    <span> Archived</span></button>
                 <button className="tab">
                     <i className="fas fa-star"></i>
 

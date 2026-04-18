@@ -14,9 +14,12 @@ export function Chats() {
     const [isRecording, setIsRecording] = useState(false);
     const [mediaRecorder, setMediaRecorder] = useState(null);
     const [recordedChunks, setRecordedChunks] = useState([]);
+    const [showMenu, setShowMenu] = useState(false);
     const { activeChatId, chats, setChats, setActiveChatId, setProfileToggle, showBtn } = useChatContext();
 
     const activeChat = chats.find((chat) => chat.id === activeChatId);
+    const textAreaRef = useRef(null);
+    const messagesEndRef = useRef(null);
 
     const newMessage = {
         id: activeChat?.message.length + 1,
@@ -32,6 +35,28 @@ export function Chats() {
         setChats((prevChats) => prevChats.map((chat) => chat.id === activeChatId ? { ...chat, message: [...chat.message, newMessage] } : chat))
         setMessageText("");
     }
+
+    const resizeTextarea = () => {
+        if (textAreaRef.current) {
+            textAreaRef.current.style.height = 'auto';
+            textAreaRef.current.style.height = `${textAreaRef.current.scrollHeight}px`;
+        }
+    };
+
+    const handleTextareaChange = (e) => {
+        setMessageText(e.target.value);
+        resizeTextarea();
+    };
+
+    useEffect(() => {
+        resizeTextarea();
+    }, [messageText]);
+
+    useEffect(() => {
+        if (messagesEndRef.current) {
+            messagesEndRef.current.scrollIntoView({ behavior: 'smooth', block: 'end' });
+        }
+    }, [activeChat?.message?.length, activeChatId]);
 
     const handlFiles = (e) => {
         const file = e.target.files[0];
@@ -78,6 +103,20 @@ export function Chats() {
             setProfileToggle(false);
         }
     }
+
+    // Close mobile menu when clicking outside
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (showMenu && !event.target.closest('.header-actions')) {
+                setShowMenu(false);
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [showMenu]);
 
 
     const onEmojiClick = (emojiData) => {
@@ -204,6 +243,25 @@ export function Chats() {
                             <i className="fas fa-camera "></i>
                         </button>
                         <button className="icon-btn"><i className="fas fa-search"></i></button>
+                        <button className="menu-btn icon-btn" onClick={() => setShowMenu(!showMenu)}>
+                            <i className="fas fa-ellipsis-v"></i>
+                        </button>
+                        {showMenu && (
+                            <div className="mobile-menu">
+                                <button className="mobile-menu-item">
+                                    <i className="fas fa-phone"></i>
+                                    <span>Call</span>
+                                </button>
+                                <button className="mobile-menu-item">
+                                    <i className="fas fa-camera"></i>
+                                    <span>Camera</span>
+                                </button>
+                                <button className="mobile-menu-item">
+                                    <i className="fas fa-search"></i>
+                                    <span>Search</span>
+                                </button>
+                            </div>
+                        )}
                     </div>
                 </div>
                 <div className="messages">
@@ -269,6 +327,7 @@ export function Chats() {
                             <span className="message-time">10:03am</span>
                         </div>
                     ))}
+                    <div ref={messagesEndRef} />
                 </div>
 
                 {showEmojiPanel && (<div className="emoji-panel"> <EmojiPicker onEmojiClick={onEmojiClick} /> </div>)}
@@ -286,13 +345,13 @@ export function Chats() {
                                 <i className="fas fa-smile"></i>
                             </div>
                         </section>
-                        <input type="text"
-                            placeholder="Type in your Message..." className="input"
+                        <textarea
+                            ref={textAreaRef}
+                            rows={1}
+                            placeholder="Type in your Message..."
+                            className="input chat-textarea"
                             value={messageText}
-                            onChange={(e) => {
-                                setMessageText(e.target.value)
-                                console.log(messageText)
-                            }}
+                            onChange={handleTextareaChange}
                         />
                         <div className="foward">
                             <section className="share">

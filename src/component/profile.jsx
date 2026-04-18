@@ -21,10 +21,10 @@ export function ProfileData() {
     return (
 
         <div className="user-details">
-            {!profileBtn ? (<section >
-                <button className="back-btn" onClick={() => {
+            {profileBtn ? (<section className="close-section">
+                <button className="close-profile-btn" onClick={() => {
                     setProfileToggle(false);
-                }}><i className="fas fa-arrow-left"></i>
+                }}><i className="fas fa-close"></i>
 
                 </button>
             </section>) : " "}

@@ -12,12 +12,15 @@ export function Nochat() {
                         Select a chat from the sidebar to start messaging, or create a new conversation.
                     </p>
                 </div>
-                <div className="no-chat-actions">
+
+                <div>
                     <button className="startChat">
-                        <i className="fas fa-user-plus"></i> Start new Chat
+                        <i class="fas fa-user-plus"></i> Start new Chat
                     </button>
                 </div>
+
             </div>
         </div>
     )
+
 }
