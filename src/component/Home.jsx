@@ -7,25 +7,52 @@ export function LandingPage() {
                 {/* Navbar */}
                 <div className="navbar">
                     <div className="brand">
-                        <div className="brand-icon">✨</div>
+                        <div className="brand-icon">
+                            <i className='fas fa-paper-plane homeIC'></i>
+                        </div>
                         <div className="brand-name">ChatSphere</div>
                     </div>
-                    <div className="nav-links">
-                        <a href="#">Features</a>
-                        <a href="#">Pricing</a>
-                        <a href="#">Security</a>
-                        <a href="#">Support</a>
-                    </div>
-                    <Link to="/login">
-                        <button className="btn-outline">Sign In</button>
-                    </Link>
-                </div>
+                    <nav className="nav-links">
+                        <ul>
+                            <li>Features</li>
+                            <li>Pricing</li>
+                            <li>About</li>
+                            <li className='media'>Contact</li>
+                        </ul>
+                    </nav>
+                    <div className='start-btn'>
+                        <Link to="/login">
 
-                {/* Hero */}
-                <div className="hero">
-                    <h1>Connect Instantly With Anyone, Anywhere</h1>
-                    <p>The most generation of seamless communication. Secured with military-grade encryption, designed for ultimate clarity.</p>
+                            <button className="btn-outline">Sign In</button>
+                        </Link>
+
+                        <Link to="signUp">
+                            <button className='start'>
+                                Get started
+                            </button>
+                        </Link>
+                    </div>
+
                 </div>
+                <section className='sections'>
+                    {/* Hero */}
+                    <div className="hero">
+                        <div className='inspo '>
+                            <div>
+                                Connect Instantly
+                            </div>
+                            <div>
+                                With
+                            </div>
+
+                            <div className='anyOne'>
+                                Anyone, Anywhere
+                            </div>
+                        </div>
+                        <p>The most generation of seamless communication. Secured with military-grade encryption, designed for ultimate clarity.</p>
+                    </div>
+                </section>
+
 
                 {/* Experience Communication Redefined */}
                 <div className="section">

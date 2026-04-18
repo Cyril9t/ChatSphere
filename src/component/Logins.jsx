@@ -5,6 +5,7 @@ import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../auth/firebase';
 import { BeatLoader } from 'react-spinners';
 import { signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
+
 export function LoginPage() {
     const [password, setPassword] = useState("")
     const [email, setEmail] = useState("");

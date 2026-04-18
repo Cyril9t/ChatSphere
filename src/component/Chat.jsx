@@ -1,119 +1,69 @@
 import "../casecades/Chat.css"
 
-// /Chat.css"
-import { useState, useEffect, useRef } from "react";
-import EmojiPicker from "emoji-picker-react";
+import { useState, useEffect, useRef, useContext } from "react";
 import { Nochat } from "./NoChatPage";
 import { Sidebar } from "./sideBare";
 import { Chats } from "./ChatsBox";
 import { ProfileData } from "./profile";
+import { useChatContext } from "../Contexts/ChatContext"
 
 export function ChatMessage() {
-  const [isShow, setIsShow] = useState(true);
-  const [message, setMessage] = useState("");
 
-  const [showPicker, setShowPicker] = useState(false);
-  const [allChat, setAllChat] = useState();
-  const [showChat, setShowChat] = useState(true);
-  const [filesSent, setFilesSent] = useState(false);
-  const [preview, setPreview] = useState(null);
-  const [sentDM, setSentDM] = useState({})
+  const { activeChatId, profileToggle, setShowBtn } = useChatContext()
+  const chatListRef = useRef(null);
+  const profileRef = useRef(null);
 
+  const chatWindowRef = useRef(null)
+  // console.log(activeChatId);
 
-  const handleFiles = (e) => {
-    const file = e.target.files[0];
+  if (activeChatId) {
+    chatListRef.current?.classList.add("visible")
+    chatWindowRef.current?.classList.remove("visible")
+    setShowBtn(true);
+  } else {
 
-    if (!file) {
-      return
-    }
+    chatListRef.current?.classList.remove("visible")
+    chatWindowRef.current?.classList.add("visible")
+    setShowBtn(false);
 
-    const fileType = file.type;
-
-    if (fileType.startsWith("image/")) {
-      console.log("image")
-    } else if (fileType.startsWith("video/")) {
-      console.log("video");
-    } else {
-      alert("Unsoppted format")
-    }
-
-    const previewUrl = URL.createObjectURL(file);
-    console.log(previewUrl);
-    setPreview(previewUrl);
-    setSentDM(prev => [...prev, { sentFile: previewUrl, typeofFiles: fileType }])
   }
 
-  const target = useRef(null);
-
-  const [users, setUsers] = useState([
-    {
-      id: 1234,
-      name: "Sarah Mitchell",
-      role: "user",
-      profilePic: "Blob_1.jpg",
-      message: [
-        {
-          id: 1,
-          usermsg: "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Iste amet reiciendis neque.",
-          sendermsg: "",
-          role: "user",
-          time: "02:30am"
-        }, {
-          id: 2,
-          usermsg: "",
-          sendermsg: "Opsum dolor sit, amet consectetur adipisicing elit. Iste amet reiciendis neque.",
-          role: "sender",
-          time: "05:41pm"
-        }
-      ],
-    },
-  ]);
 
   useEffect(() => {
-    if (message.length > 0) {
-      setIsShow(false);
+
+    // if (profileRef.current) return;
+
+    if (profileToggle) {
+      profileRef.current?.classList.remove("showProfile");
+      chatWindowRef.current?.classList.add("visible")
+      console.log(profileToggle)
+      console.log("hello")
     } else {
-      setIsShow(true)
+      profileRef.current?.classList.add("showProfile");
+      console.log(profileToggle);
     }
+  }, [profileToggle]);
 
-  }, [message]);
-
-
-
-  const sendMessage = (e) => {
-    e.preventDefault();
-    if (!message) {
-      return;
-    }
-
-    setMessage("")
-    // console.log(allChat);
-
-  }
-  const emojiClick = (emojiData) => {
-    setMessage(prev => prev + emojiData.emoji);
-  }
-
-  const chats = (ids) => {
-    const checkForid = users.find((user) => user.id == ids);
-    setAllChat(checkForid);
-  }
 
   return (
 
     <div className="chat-app">
-
       {/* Sidebar */}
 
-      <Sidebar users={users} setShowChat={setShowChat} chats={chats} />
+      <div ref={chatListRef} className="sidebar">
+        <Sidebar />
+      </div>
 
       {/* Main chat area */}
-
-      <Chats setUsers={setUsers} EmojiPicker={EmojiPicker} emojiClick={emojiClick} isShow={isShow} setShowPicker={setShowPicker} setMessage={setMessage} message={message} handleFiles={handleFiles} showChat={showChat} allChat={allChat} users={users} showPicker={showPicker} sendMessage={sendMessage} />
+      <div ref={chatWindowRef} className="main-chat">
+        <Chats />
+      </div>
 
       {/* User details panel */}
+      <div ref={profileRef} className="user-details">
+        <ProfileData />
+      </div>
 
-      <ProfileData />
     </div >
   );
 };
